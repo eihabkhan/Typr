@@ -14,6 +14,10 @@ let wordPool = [ "perfect", "enjoy", "behave", "grape", "airport", "argument", "
 let randomWord;
 let score = 0;
 let time = 10;
+let difficulty = localStorage.getItem("difficulty") !== null ? localStorage.getItem("difficulty") : "normal"
+
+// Set difficulty on load
+difficultySelect.value = difficulty;
 
 text.focus();
 
@@ -65,7 +69,30 @@ text.addEventListener("input", (e) => {
         addWordToDOM();
         updateScore();
         text.value = "";
-        time += 2;
+        switch (difficulty) {
+            case "easy": 
+                time += 5;
+                break;
+            case "normal": 
+                time += 4;
+                break;
+            case "hard":
+                time += 3;
+                break;
+        }
         updateTime();
     }
 });
+
+settingsBtn.addEventListener("click", () => {
+    settings.classList.toggle("hidden");
+
+    settingsBtn.innerHTML = settings.classList.contains("hidden")? settingsBtn.innerHTML = `<i class="fas fa-eye-slash"></i>` : settingsBtn.innerHTML = `<i class="fas fa-eye"></i>`
+});
+
+settingsForm.addEventListener("change", e => {
+    difficulty = e.target.value;
+    
+    localStorage.setItem("difficulty", difficulty);
+
+})
